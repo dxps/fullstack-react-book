@@ -1,14 +1,26 @@
-/* Styles go here */
+@import url("/assets/styles/roboto.css");
+
+body, .ui.header, .ui.text.container {
+    font-family: 'Roboto';
+    font-weight: 300;
+    font-size: 15px;
+}
 
 #content {
-  margin-bottom: 4em;
+    margin-bottom: 4em;
 }
 
 .ui.dividing.header {
-  padding-top: 1em;
-  margin-bottom: 2em;
+    padding-top: 1em;
+    margin-bottom: 2em;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 300;
+}
+
+.ui.items > .item .extra {
+    color: rgba(0, 0, 0, 0.8);
 }
 
 i.icon {
-  margin: 0;
+    margin: 0;
 }
