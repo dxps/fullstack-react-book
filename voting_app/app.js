@@ -27,10 +27,10 @@ const ProductList = React.createClass({
 
     handleProductUpVote: function (productId) {
 
-        console.log("Product with id " + productId + " was upvoted.");
         Data.forEach((el) => {
             if (el.id == productId) {
                 el.votes = el.votes + 1;
+                console.log("Product with id %d was upvoted, now the votes are %d.", productId, el.votes);
                 return;
             }
         });
@@ -39,11 +39,11 @@ const ProductList = React.createClass({
     },
 
     handleProductDownVote: function (productId) {
-
-        console.log("Product with id " + productId + " was downvoted.");
+        
         Data.forEach((el) => {
             if (el.id == productId) {
                 el.votes = el.votes - 1;
+                console.log("Product with id %d was downvoted, now the votes are %d.", productId, el.votes);
                 return;
             }
         });
@@ -53,26 +53,26 @@ const ProductList = React.createClass({
     
     handleSortDescOrder: function () {
         
-        // console.log("Product list should use descending order.");
-        this.setState({ sortOrder: 'DESC' }, () => { this.updateProductListOrder(); });
+        this.updateProductListOrder('DESC');
         
     },
 
     handleSortAscOrder: function () {
-
-        // console.log("Product list should use ascending order.");
-        this.setState({ sortOrder: 'ASC' }, () => { this.updateProductListOrder(); });
+        
+        this.updateProductListOrder('ASC');
         
     },
 
-    updateProductListOrder: function () {
+    updateProductListOrder: function (sortOrder) {
 
-        const products = this.state.products.sort((a, b) => {
-            if (this.state.sortOrder == 'DESC') return b.votes - a.votes;
-            if (this.state.sortOrder == 'ASC') return a.votes - b.votes;
+        if (sortOrder === undefined)
+            sortOrder = this.state.sortOrder;
+        const products = Data.sort((a, b) => {
+            if (sortOrder == 'DESC') return b.votes - a.votes;
+            if (sortOrder == 'ASC') return a.votes - b.votes;
         });
+        this.setState({ sortOrder, products });
         // console.log("(updateProductListOrder) sortOrder: '%s' products: [ %s ]", this.state.sortOrder, JSON.stringify(products, null, 4));
-        this.setState({products: products});
 
     },
 
