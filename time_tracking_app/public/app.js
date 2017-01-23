@@ -261,13 +261,48 @@ const EditableTimer = React.createClass({
 
 const TimerForm = React.createClass({
     
+    componentDidMount: function () {
+        
+        $('.ui.form').form({
+            on: 'blur',
+            inline: true,
+            fields: {
+                title: {
+                    identifier: 'title',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a title.'
+                        }
+                    ]
+                },
+                project: {
+                    identifier: 'project',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please enter a project name.'
+                        }
+                    ]
+                }
+            }
+        });
+        // focus on 1st form field (title), otherwise
+        // directly submitting will skip any 'blur' event.
+        this.refs.title.focus();
+        
+    },
+    
     handleSubmit: function () {
         
-        this.props.onFormSubmit({
-            id: this.props.id,
-            title: this.refs.title.value,
-            project: this.refs.project.value
-        });
+        const noOfErrors = $('.ui.form .field.error').length;
+        if (noOfErrors === 0) {
+            this.props.onFormSubmit({
+                id: this.props.id,
+                title: this.refs.title.value,
+                project: this.refs.project.value
+            });
+        }
         
     },
     
@@ -280,11 +315,11 @@ const TimerForm = React.createClass({
                     <div className='ui form'>
                         <div className='field'>
                             <label>Title</label>
-                            <input type='text' ref='title' defaultValue={this.props.title}/>
+                            <input type='text' name='title' ref='title' defaultValue={this.props.title}/>
                         </div>
                         <div className='field'>
                             <label>Project</label>
-                            <input type='text' ref='project' defaultValue={this.props.project}/>
+                            <input type='text' name='project' ref='project' defaultValue={this.props.project}/>
                         </div>
                         <div className='ui two bottom attached buttons'>
                             <button
