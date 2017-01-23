@@ -375,6 +375,12 @@ const ToggleableTimerForm = React.createClass({
 
 const Timer = React.createClass({
     
+    getInitialState: function () {
+        
+        return { showEditDeleteButtons: false };
+        
+    },
+    
     componentDidMount: function () {
         
         this.forceUpdateInterval = setInterval( () => this.forceUpdate(), 1000);
@@ -405,30 +411,44 @@ const Timer = React.createClass({
         
     },
     
+    toggleShowHideEditDeleteButtons: function () {
+        
+        this.setState({ showEditDeleteButtons: !this.state.showEditDeleteButtons });
+        
+    },
+    
     render:function () {
         
         const elapsedString = helpers.renderElapsedString(this.props.elapsed, this.props.runningSince);
         return (
             <div className='ui centered card'>
-                <div className='content'>
+                <div className='content'
+                     onMouseEnter={this.toggleShowHideEditDeleteButtons}
+                     onMouseLeave={this.toggleShowHideEditDeleteButtons}>
+                    <div className='extra content'>
+                        <span
+                            ref='editIcon'
+                            className='right floated edit icon'
+                            onClick={this.props.onEditClick}
+                            hidden={!this.state.showEditDeleteButtons}
+                        >
+                            <i className='edit icon'></i>
+                        </span>
+                        <span
+                            ref='deleteIcon'
+                            className='right floated trash icon'
+                            onClick={this.handleDeleteClick}
+                            hidden={!this.state.showEditDeleteButtons}
+                        >
+                            <i className='trash icon'></i>
+                        </span>
+                    </div>
                     <div className='header'> {this.props.title} </div>
                     <div className='meta'> {this.props.project} </div>
                     <div className='center aligned description'>
                         <h2>{elapsedString}</h2>
                     </div>
-                    <div className='extra content'>
-                        <span className='right floated edit icon'
-                              onClick={this.props.onEditClick}
-                        >
-                            <i className='edit icon'></i>
-                        </span>
-                        <span className='right floated trash icon'
-                              onClick={this.handleDeleteClick}>
-                            <i className='trash icon'></i>
-                        </span>
-                    </div>
                 </div>
-                {/*<div className='ui bottom attached blue basic button'> Start</div>*/}
                 <TimerStartStopButton
                     timerIsRunning={!!this.props.runningSince}
                     onStartClick={this.handleStartClick}
