@@ -1,3 +1,8 @@
+
+// ---------------------------------------
+//            TimersDashboard
+// ---------------------------------------
+
 const TimersDashboard = React.createClass({
     
     getInitialState:function () {
@@ -33,13 +38,54 @@ const TimersDashboard = React.createClass({
         
     },
     
+    handleEditFormSubmit: function (attrs) {
+        
+        this.updateTimer(attrs);
+        
+    },
+    
+    updateTimer: function (attrs) {
+        
+        this.setState({
+           timers: this.state.timers.map(
+               (timer) => {
+                   if (timer.id === attrs.id) {
+                       return Object.assign({}, timer, {
+                           title:attrs.title,
+                           project:attrs.project
+                       });
+                   } else {
+                       return timer;
+                   }
+               }
+           )
+        });
+        
+    },
+    
+    handleTimerDelete: function (timerId) {
+        
+        this.deleteTimer(timerId);
+        
+    },
+    
+    deleteTimer: function (timerId) {
+        
+        this.setState({
+            timers: this.state.timers.filter( (t) => t.id !== timerId )
+        });
+        
+    },
+    
     render:function () {
         
         return (
             <div className='ui three column centered grid'>
                 <div className='column'>
                     <EditableTimerList
-                        timers={this.state.timers} />
+                        timers={this.state.timers}
+                        onFormSubmit={this.handleEditFormSubmit}
+                        onDeleteClick={this.handleTimerDelete} />
                     <ToggleableTimerForm
                         onFormSubmit={this.handleCreateFormSubmit} />
                 </div>
@@ -49,6 +95,10 @@ const TimersDashboard = React.createClass({
     }
     
 });
+
+// ---------------------------------------
+//            EditableTimerList
+// ---------------------------------------
 
 const EditableTimerList = React.createClass({
     
@@ -62,6 +112,8 @@ const EditableTimerList = React.createClass({
                 project={timer.project}
                 elapsed={timer.elapsed}
                 runningSince={timer.runningSince}
+                onFormSubmit={this.props.onFormSubmit}
+                onDeleteClick={this.props.onDeleteClick}
             /> ));
         return (
             <div id='timers'>
@@ -73,11 +125,46 @@ const EditableTimerList = React.createClass({
     
 });
 
+// ---------------------------------------
+//              EditableTimer
+// ---------------------------------------
+
 const EditableTimer = React.createClass({
     
     getInitialState: function () {
         
         return { editFormOpen: false };
+        
+    },
+    
+    handleEditClick: function () {
+        
+        this.openForm();
+        
+    },
+    
+    handleFormSubmit: function (timer) {
+        
+        this.props.onFormSubmit(timer);
+        this.closeForm();
+        
+    },
+    
+    handleFormClose: function () {
+        
+        this.closeForm();
+        
+    },
+    
+    openForm: function () {
+        
+        this.setState({ editFormOpen: true });
+        
+    },
+    
+    closeForm: function () {
+        
+        this.setState({ editFormOpen: false });
         
     },
     
@@ -89,6 +176,8 @@ const EditableTimer = React.createClass({
                     id={this.props.id}
                     title={this.props.title}
                     project={this.props.project}
+                    onFormSubmit={this.handleFormSubmit}
+                    onFormClose={this.handleFormClose}
                 />
             );
         } else {
@@ -99,6 +188,8 @@ const EditableTimer = React.createClass({
                     project={this.props.project}
                     elapsed={this.props.elapsed}
                     runningSince={this.props.runningSince}
+                    onEditClick={this.handleEditClick}
+                    onDeleteClick={this.props.onDeleteClick}
                 />
             );
         }
@@ -107,7 +198,17 @@ const EditableTimer = React.createClass({
     
 });
 
+// ---------------------------------------
+//                  Timer
+// ---------------------------------------
+
 const Timer = React.createClass({
+    
+    handleDeleteClick: function () {
+        
+        this.props.onDeleteClick(this.props.id);
+        
+    },
     
     render:function () {
         
@@ -121,10 +222,13 @@ const Timer = React.createClass({
                         <h2>{elapsedString}</h2>
                     </div>
                     <div className='extra content'>
-                        <span className='right floated edit icon'>
+                        <span className='right floated edit icon'
+                              onClick={this.props.onEditClick}
+                        >
                             <i className='edit icon'></i>
                         </span>
-                        <span className='right floated trash icon'>
+                        <span className='right floated trash icon'
+                              onClick={this.handleDeleteClick}>
                             <i className='trash icon'></i>
                         </span>
                     </div>
@@ -134,6 +238,10 @@ const Timer = React.createClass({
         );
     },
 });
+
+// ---------------------------------------
+//               TimerForm
+// ---------------------------------------
 
 const TimerForm = React.createClass({
     
@@ -185,11 +293,16 @@ const TimerForm = React.createClass({
     
 });
 
+// ---------------------------------------
+//           ToggleableTimerForm
+// ---------------------------------------
+
 const ToggleableTimerForm = React.createClass({
     
     getInitialState: function () {
         
         return { isOpen: false };
+        
     },
     
     // used by [+] button
