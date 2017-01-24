@@ -2,20 +2,29 @@
     {
         "title": "Mow the lawn",
         "project": "House Chores",
-        "elapsed": 5456099,
-        "id": "0a4a79cb-b06d-4cb1-883d-549a1e3b66d7"
+        "elapsed": 5504638,
+        "id": "0a4a79cb-b06d-4cb1-883d-549a1e3b66d7",
+        "runningSince": null
     },
     {
         "title": "Clear paper jam",
         "project": "Office Chores",
-        "elapsed": 1273998,
-        "id": "a73c1d19-f32d-4aff-b470-cea4e792406a"
+        "elapsed": 1279367,
+        "id": "a73c1d19-f32d-4aff-b470-cea4e792406a",
+        "runningSince": null
     },
     {
         "title": "The Pomodoro Technique",
         "project": "Organize Myself",
         "id": "a3cc56f7-86a6-421c-a377-095d3d3ce679",
         "elapsed": 474269,
+        "runningSince": null
+    },
+    {
+        "title": "\"Fullstack React\" book",
+        "project": "Learn React.js",
+        "id": "d4601d66-218d-4624-a87a-eae5bc581ae1",
+        "elapsed": 157153,
         "runningSince": null
     }
 ]
